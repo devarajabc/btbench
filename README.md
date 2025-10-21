@@ -4,7 +4,7 @@ For comparing different binary translators performance in [library wrapping](htt
 
 ## Workloads
 
-[ptitSeb](https://github.com/ptitSeb) [introduced](https://box86.org/2023/05/performances2022/) `7z`, `dav1d` and `glmark2` benchmarks. While `7z` and `dav1d` workloads are able to compare translators JIT compilers performance. But `glmark2` and `gtkperf` mainly compares library wrapping performance. There are other benchmarks to compare translator compiler too, such as `scimark4_c` and [scilab benchmark](https://help.scilab.org/bench_run.html).
+[ptitSeb](https://github.com/ptitSeb) [introduced](https://box86.org/2023/05/performances2022/) `7z`, `dav1d` and `glmark2` benchmarks. While `7z` and `dav1d` workloads are able to compare translators JIT compilers performance. But `glmark2` and `gtkperf` mainly compares library wrapping performance. There are other benchmarks to compare translator compiler too, such as `scimark4_c`, `sljit` and [scilab benchmark](https://help.scilab.org/bench_run.html).
 
 ## Usage
 
