@@ -5,7 +5,7 @@ import os
 import datetime
 from matplotlib import pyplot as plt, dates as mdates
 
-def _parse(path):
+def _parse(path, title = "Top-Down"):
     try:
         line_dict = {}
         x = []
@@ -56,7 +56,6 @@ def _parse(path):
         plt.plot(x, y_bad_speculation, label = "bad speculation")
         plt.plot(x, y_frontend_bound, label = "frontend bound")
         plt.plot(x, y_backend_bound, label = "backend bound")
-        title = "Top-Down"
         plt.gcf().canvas.set_window_title(title)
         plt.title(title)
         plt.legend()
@@ -65,5 +64,7 @@ def _parse(path):
         print(e)
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 2:
+        _parse(sys.argv[1], sys.argv[2])
+    elif len(sys.argv) > 1:
         _parse(sys.argv[1])
