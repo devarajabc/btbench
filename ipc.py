@@ -21,7 +21,6 @@ def _parse(path):
             for key in sorted(line_dict):
                 dt = datetime.datetime.fromtimestamp(key)
                 value = line_dict[key]
-                #print("%s %f" % (dt.strftime("%H:%M:%S"), value))
                 x.append(dt)
                 y.append(value)
             print("Average IPC: %f" % (total / float(len(line_dict))))
