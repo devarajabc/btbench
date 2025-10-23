@@ -31,6 +31,49 @@ def _parse(path, title = "Top-Down"):
                             line_dict[timestamp] = [ipc, retiring, bad_speculation, frontend_bound, backend_bound]
                             total_ipc = ipc + total_ipc
                             break
+                        elif "insn per cycle" in line and "instructions" in line:
+                            timestamp = int(datetime.datetime.timestamp(datetime.datetime.strptime(_path[5:-4], "%Y%m%d%H%M%S")))
+                            array = line.split()
+                            if len(array) < 8:
+                                break
+                            ipc = float(array[3])
+                            retiring = float(array[7][1:-2]) / 100.0
+                            line = next(f)
+                            if "iTLB-load-misses" in line:
+                                array = line.split()
+                                itlb_load_misses = float(array[2][1:-2]) / 100.0
+                            line = next(f)
+                            if "branch-misses" in line:
+                                array = line.split()
+                                if len(array) < 3:
+                                    break
+                                branch_misses = float(array[2][1:-2]) / 100.0
+                            bad_speculation = branch_misses
+                            line = next(f)
+                            if "L1-icache-load-misses" in line:
+                                array = line.split()
+                                l1_icache_load_misses = float(array[2][1:-2]) / 100.0
+                            line = next(f)
+                            if "L1-icache-prefetch-misses" in line:
+                                array = line.split()
+                                l1_icache_prefetch_misses = float(array[2][1:-2]) / 100.0
+                            frontend_bound = (itlb_load_misses + branch_misses + l1_icache_load_misses + l1_icache_prefetch_misses) / 4.0
+                            line = next(f)
+                            if "dTLB-load-misses" in line:
+                                array = line.split()
+                                dtlb_load_misses = float(array[2][1:-2]) / 100.0
+                            line = next(f)
+                            if "dTLB-store-misses" in line:
+                                array = line.split()
+                                dtlb_store_misses = float(array[2][1:-2]) / 100.0
+                            line = next(f)
+                            if "dTLB-prefetch-misses" in line:
+                                array = line.split()
+                                dtlb_prefetch_misses = float(array[2][1:-2]) / 100.0
+                            backend_bound = (dtlb_load_misses + dtlb_store_misses + dtlb_prefetch_misses) / 3.0
+                            line_dict[timestamp] = [ipc, retiring, bad_speculation, frontend_bound, backend_bound]
+                            total_ipc = ipc + total_ipc
+                            break
         for key in sorted(line_dict):
             dt = datetime.datetime.fromtimestamp(key)
             ipc = line_dict[key][0]
