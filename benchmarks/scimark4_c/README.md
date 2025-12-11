@@ -14,5 +14,5 @@
 ```
 export JAVA_HOME="/usr/lib/jvm/java-1.8.0"
 make libjniscimark4-amd64
-$(JAVA_HOME)/bin/java -Djava.library.path=./ SciMark4
+$(JAVA_HOME)/bin/java -Djava.library.path=./ SciMark4J
 ```

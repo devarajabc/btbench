@@ -40,6 +40,10 @@ libjniscimark4-amd64 :  $(OBJS)
 	$(JAVAC) -h . SciMark4J.java
 	$(CC) $(CFLAGS) -shared -fPIC -o libjniscimark4-amd64.so $(OBJS) -ldl -lm
 
+libjniscimark4-loongarch64 :  $(OBJS)
+	$(JAVAC) -h . SciMark4J.java
+	$(CC) $(CFLAGS) -shared -fPIC -o libjniscimark4-loongarch64.so $(OBJS) -ldl -lm
+
 scimark4 :  $(OBJS)
 	$(CC) $(CFLAGS) -o scimark4  $(OBJS) $(LDFLAGS) -lm 
 
