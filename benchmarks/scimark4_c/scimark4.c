@@ -6,6 +6,9 @@
 #include "Random.h"
 #include "kernel.h"
 #include "constants.h"
+#ifdef LIBJNISCIMARK4
+#include "SciMark4J.h"
+#endif /* LIBJNISCIMARK4 */
 
 void print_banner(void);
 
@@ -169,3 +172,11 @@ void print_banner()
  printf("** for details. (Results can be submitted to pozo@nist.gov)     **\n");
  printf("**                                                              **\n");
 }
+
+#ifdef LIBJNISCIMARK4
+JNIEXPORT void JNICALL Java_SciMark4J_run(JNIEnv* env, jobject obj)
+{
+    char* argv[] = { "" };
+    main(sizeof(argv) / sizeof(char*), argv);
+}
+#endif /* LIBJNISCIMARK4 */
