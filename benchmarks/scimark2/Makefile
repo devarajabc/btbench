@@ -7,6 +7,7 @@ all:
 	$(JAVAC) -O FFT.java
 	$(JAVAC) -O SOR.java
 	$(JAVAC) -O MonteCarlo.java
+	$(JAVAC) -O SparseCompRow.java
 	$(JAVAC) -O kernel.java
 	mv *.class jnt/scimark2/
 
@@ -25,4 +26,9 @@ libjnimontecarlo-amd64:
 	$(CC) $(CFLAGS) -c Random.c -o Random.o
 	$(CC) $(CFLAGS) -c MonteCarlo.c -o MonteCarlo.o
 	$(CC) $(CFLAGS) -shared -fPIC -o libjnimontecarlo-amd64.so MonteCarlo.o Random.o -ldl -lm
+
+libjnisparsecomprow-amd64:
+	$(JAVAC) -h . SparseCompRow.java
+	$(CC) $(CFLAGS) -c SparseCompRow.c -o SparseCompRow.o
+	$(CC) $(CFLAGS) -shared -fPIC -o libjnisparsecomprow-amd64.so SparseCompRow.o -ldl -lm
 

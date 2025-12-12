@@ -7,8 +7,8 @@ public class kernel
 
 	public static double measureFFT(int N, double mintime, Random R)
 	{
-		// initialize FFT data as complex (N real/img pairs)
                 System.out.println("measureFFT");
+		// initialize FFT data as complex (N real/img pairs)
 
 		double x[] = RandomVector(2*N, R);
 		double oldx[] = NewVectorCopy(x);
@@ -82,6 +82,7 @@ public class kernel
 	public static double measureSparseMatmult(int N, int nz, 
 			double min_time, Random R)
 	{
+                System.out.println("measureSparseMatmult");
 		// initialize vector multipliers and storage for result
 		// y = A*y;
 
