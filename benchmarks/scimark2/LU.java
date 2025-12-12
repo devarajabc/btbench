@@ -12,6 +12,12 @@ package jnt.scimark2;
 */
 public class LU 
 {
+    static {
+        System.loadLibrary("jnilu-" + System.getProperty("os.arch"));
+    }
+
+    private native void JniFactor(double A[][],  int pivot[]);
+
     /**
         Returns a <em>copy</em> of the compact LU factorization.
         (useful mainly for debugging.)

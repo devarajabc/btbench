@@ -153,6 +153,7 @@ public class kernel
 
 	public static double measureLU(int N, double min_time, Random R)
 	{
+                System.out.println("measureLU");
 		// compute approx Mlfops, or O if LU yields large errors
 
 		double A[][] = RandomMatrix(N, N,  R);

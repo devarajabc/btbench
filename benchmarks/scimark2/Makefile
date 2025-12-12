@@ -8,6 +8,7 @@ all:
 	$(JAVAC) -O SOR.java
 	$(JAVAC) -O MonteCarlo.java
 	$(JAVAC) -O SparseCompRow.java
+	$(JAVAC) -O LU.java
 	$(JAVAC) -O kernel.java
 	mv *.class jnt/scimark2/
 
@@ -32,3 +33,7 @@ libjnisparsecomprow-amd64:
 	$(CC) $(CFLAGS) -c SparseCompRow.c -o SparseCompRow.o
 	$(CC) $(CFLAGS) -shared -fPIC -o libjnisparsecomprow-amd64.so SparseCompRow.o -ldl -lm
 
+libjnilu-amd64:
+	$(JAVAC) -h . LU.java
+	$(CC) $(CFLAGS) -c LU.c -o LU.o
+	$(CC) $(CFLAGS) -shared -fPIC -o libjnilu-amd64.so LU.o -ldl -lm
