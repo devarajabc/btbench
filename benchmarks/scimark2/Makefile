@@ -6,6 +6,7 @@ all:
 	$(JAVAC) -O commandline.java
 	$(JAVAC) -O FFT.java
 	$(JAVAC) -O SOR.java
+	$(JAVAC) -O MonteCarlo.java
 	$(JAVAC) -O kernel.java
 	mv *.class jnt/scimark2/
 
@@ -18,4 +19,10 @@ libjnisor-amd64:
 	$(JAVAC) -h . SOR.java
 	$(CC) $(CFLAGS) -c SOR.c -o SOR.o
 	$(CC) $(CFLAGS) -shared -fPIC -o libjnisor-amd64.so SOR.o -ldl -lm
+
+libjnimontecarlo-amd64:
+	$(JAVAC) -h . MonteCarlo.java
+	$(CC) $(CFLAGS) -c Random.c -o Random.o
+	$(CC) $(CFLAGS) -c MonteCarlo.c -o MonteCarlo.o
+	$(CC) $(CFLAGS) -shared -fPIC -o libjnimontecarlo-amd64.so MonteCarlo.o Random.o -ldl -lm
 

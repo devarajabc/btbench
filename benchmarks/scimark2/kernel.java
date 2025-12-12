@@ -61,6 +61,7 @@ public class kernel
 
 	public static double measureMonteCarlo(double min_time, Random R)
 	{
+                System.out.println("measureMonteCarlo");
 		Stopwatch Q = new Stopwatch();
 
 		int cycles=1;

@@ -31,6 +31,12 @@ package jnt.scimark2;
 
 public class MonteCarlo
 {
+    static {
+        System.loadLibrary("jnimontecarlo-" + System.getProperty("os.arch"));
+    }
+
+    private native double JniIntegrate(int Num_samples);
+
 	final static int SEED = 113;
 
 	public static final double num_flops(int Num_samples)
@@ -46,21 +52,22 @@ public class MonteCarlo
 	public static final double integrate(int Num_samples)
 	{
 
-		Random R = new Random(SEED);
+		//Random R = new Random(SEED);
 
 
-		int under_curve = 0;
-		for (int count=0; count<Num_samples; count++)
-		{
-			double x= R.nextDouble();
-			double y= R.nextDouble();
+		//int under_curve = 0;
+		//for (int count=0; count<Num_samples; count++)
+		//{
+		//	double x= R.nextDouble();
+		//	double y= R.nextDouble();
 
-			if ( x*x + y*y <= 1.0)
-				 under_curve ++;
-			
-		}
+		//	if ( x*x + y*y <= 1.0)
+		//		 under_curve ++;
+		//	
+		//}
 
-		return ((double) under_curve / Num_samples) * 4.0;
+		//return ((double) under_curve / Num_samples) * 4.0;
+                return new MonteCarlo().JniIntegrate(Num_samples);
 	}
 
 

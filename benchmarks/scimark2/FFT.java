@@ -18,6 +18,9 @@ public class FFT {
         System.loadLibrary("jnifft-" + System.getProperty("os.arch"));
     }
 
+    private native void JniTransform(double data[]);
+    private native void JniInverse(double data[]);
+
   public static final double num_flops(int N)
   {
 	 double Nd = (double) N;
@@ -25,9 +28,6 @@ public class FFT {
 
 	 return (5.0*Nd-2)*logN + 2*(Nd+1);
    }
-
-    private native void JniTransform(double data[]);
-    private native void JniInverse(double data[]);
 
   /** Compute Fast Fourier Transform of (complex) data, in place.*/
   public static void transform (double data[]) {
