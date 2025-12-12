@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 
 #include "jnt_scimark2_FFT.h"
 
@@ -149,12 +150,11 @@ JNIEXPORT void JNICALL Java_jnt_scimark2_FFT_JniTransform(JNIEnv* env, jobject o
 {
     jsize N = (*env)->GetArrayLength(env, arr);
     double* data = (double*)malloc(N * sizeof(double));
+    assert(data != NULL);
     (*env)->GetDoubleArrayRegion(env, arr, 0, N, data);
-    FFT_transform_internal(N, data, -1);
-    if (data) {
-        free(data);
-        data = NULL;
-    }
+    FFT_transform(N, data);
+    free(data);
+    data = NULL;
 }
 
 void FFT_inverse(int N, double *data)
@@ -177,18 +177,10 @@ JNIEXPORT void JNICALL Java_jnt_scimark2_FFT_JniInverse(JNIEnv* env, jobject obj
 {
     jsize N = (*env)->GetArrayLength(env, arr);
     double* data = (double*)malloc(N * sizeof(double));
+    assert(data != NULL);
     (*env)->GetDoubleArrayRegion(env, arr, 0, N, data);
-    int n = N / 2;
-    double norm = 0.0;
-    int i = 0;
-    FFT_transform_internal(N, data, -1);
-    norm = 1 / ((double) n);
-    for (i = 0; i < N; i++) {
-        data[i] *= norm;
-    }
+    FFT_inverse(N, data);
     (*env)->SetDoubleArrayRegion(env, arr, 0, N, data);
-    if (data) {
-        free(data);
-        data = NULL;
-    }
+    free(data);
+    data = NULL;
 }

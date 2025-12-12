@@ -41,6 +41,7 @@ public class kernel
 
 	public static double measureSOR(int N, double min_time, Random R)
 	{
+                System.out.println("measureSOR");
 		double G[][] = RandomMatrix(N, N, R);
 
 		Stopwatch Q = new Stopwatch();
