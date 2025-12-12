@@ -50,8 +50,8 @@ if __name__ == '__main__':
 
     ''' scimark4_c '''
     print("scimark4_c %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
-    run("%s %s/benchmarks/scimark4_c/scimark4" % (tr, cwd), log_file)
-    run("%s %s/benchmarks/scimark4_c/scimark4 -large" % (tr, cwd), log_file)
+    run("%s %s/benchmarks/scimark4_c/scimark4-x86_64" % (tr, cwd), log_file)
+    run("%s %s/benchmarks/scimark4_c/scimark4-x86_64 -large" % (tr, cwd), log_file)
 
     ''' glmark2 '''
     glmark2_path = "%s/benchmarks/glmark2" % (cwd)
