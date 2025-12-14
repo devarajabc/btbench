@@ -1,4 +1,5 @@
 *.o
+*.core
 *.sh
 *.log
 *.ivf
