@@ -33,13 +33,13 @@ def run_native(cwd, log_file):
             print("skip dav1d: dav1d not found in PATH")
 
     ''' 7z '''
-    sevenz_bin = "/usr/bin/7zz" if os.path.exists("/usr/bin/7zz") else shutil.which("7zz")
+    sevenz_bin = shutil.which("7zz") or shutil.which("7z")
     if sevenz_bin:
         log_marker(log_file, "7z")
         print("7z %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
         run("%s b" % (sevenz_bin), log_file)
     else:
-        print("skip 7z: 7zz not found in PATH")
+        print("skip 7z: 7zz/7z not found in PATH")
 
     ''' scimark4_c '''
     scimark4_bin = "%s/benchmarks/scimark4_c/scimark4-aarch64" % (cwd)
