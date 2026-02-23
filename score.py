@@ -83,29 +83,28 @@ def print_comparison(translated, native):
     for key, label, mode in all_benchmarks:
         t = translated.get(key)
         n = native.get(key)
-        if not t:
-            continue
         try:
-            tf = float(t)
+            tf = float(t) if t else None
         except (ValueError, TypeError):
+            tf = None
+        try:
+            nf = float(n) if n else None
+        except (ValueError, TypeError):
+            nf = None
+        if tf is None and nf is None:
             continue
-        if n:
-            try:
-                nf = float(n)
-                if mode == 'lower':
-                    ratio = nf / tf * 100.0 if tf != 0 else 0
-                    print("|%-16s|%-8.3f|%-11.3f|%-10.1f|" % (label, nf, tf, ratio))
-                else:
-                    ratio = tf / nf * 100.0 if nf != 0 else 0
-                    print("|%-16s|%-8.2f|%-11.2f|%-10.1f|" % (label, nf, tf, ratio))
-            except (ValueError, TypeError):
-                print("|%-16s|%-8s|%-11s|%-10s|" % (label, n, t, "N/A"))
-        else:
-            # No native baseline — show translated score only
+        fmt = "%-8.3f" if mode == 'lower' else "%-8.2f"
+        tfmt = "%-11.3f" if mode == 'lower' else "%-11.2f"
+        if tf is not None and nf is not None:
             if mode == 'lower':
-                print("|%-16s|%-8s|%-11.3f|%-10s|" % (label, "-", tf, "-"))
+                ratio = nf / tf * 100.0 if tf != 0 else 0
             else:
-                print("|%-16s|%-8s|%-11.2f|%-10s|" % (label, "-", tf, "-"))
+                ratio = tf / nf * 100.0 if nf != 0 else 0
+            print(("|%-16s|" + fmt + "|" + tfmt + "|%-10.1f|") % (label, nf, tf, ratio))
+        elif tf is not None:
+            print(("|%-16s|%-8s|" + tfmt + "|%-10s|") % (label, "-", tf, "-"))
+        else:
+            print(("|%-16s|" + fmt + "|%-11s|%-10s|") % (label, nf, "-", "-"))
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
