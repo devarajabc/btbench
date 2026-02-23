@@ -102,7 +102,8 @@ def print_comparison(native, box64):
             ratios.append(ratio)
             nstr = "%.3f" % nf if mode == 'lower' else "%.2f" % nf
             bstr = "%.3f" % bf if mode == 'lower' else "%.2f" % bf
-            print("|%-16s|%-10s|%-10s|%-8.2f|%-12.1f%%|" % (label, nstr, bstr, ratio, ratio * 100))
+            norm = "%.1f%%" % (ratio * 100)
+            print("|%-16s|%-10s|%-10s|%-8.2f|%-12s|" % (label, nstr, bstr, ratio, norm))
         elif bf is not None:
             bstr = "%.3f" % bf if mode == 'lower' else "%.2f" % bf
             print("|%-16s|%-10s|%-10s|%-8s|%-12s|" % (label, "-", bstr, "-", "-"))
@@ -115,7 +116,8 @@ def print_comparison(native, box64):
         for r in ratios:
             geo_mean *= r
         geo_mean = geo_mean ** (1.0 / len(ratios))
-        print("|%-16s|%-10s|%-10s|%-8.2f|%-12.1f%%|" % ("** geo mean **", "", "", geo_mean, geo_mean * 100))
+        norm = "%.1f%%" % (geo_mean * 100)
+        print("|%-16s|%-10s|%-10s|%-8.2f|%-12s|" % ("** geo mean **", "", "", geo_mean, norm))
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
