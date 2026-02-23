@@ -20,17 +20,23 @@ def run_native(cwd, log_file):
     print("btbench native mode start")
 
     ''' dav1d '''
-    dav1d_bin = shutil.which("dav1d")
+    dav1d_bin = "%s/benchmarks/dav1d/dav1d-aarch64" % (cwd)
+    dav1d_lib = "%s/benchmarks/dav1d/lib-aarch64" % (cwd)
+    if not os.path.exists(dav1d_bin):
+        dav1d_bin = shutil.which("dav1d")
+        dav1d_lib = None
     ivf_path = "%s/benchmarks/dav1d/Chimera-AV1-8bit-480x270-552kbps.ivf" % (cwd)
     if not os.path.exists(ivf_path):
         os.system("wget http://dgql.org/~unlord/Netflix/Chimera/Chimera-AV1-8bit-480x270-552kbps.ivf -O %s" % (ivf_path))
     if dav1d_bin and os.path.exists(ivf_path):
+        if dav1d_lib:
+            os.environ['LD_LIBRARY_PATH'] = "%s:%s" % (dav1d_lib, os.environ.get('LD_LIBRARY_PATH', ''))
         log_marker(log_file, "dav1d")
         print("dav1d %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
         run("%s -i %s --muxer null 2>&1|tee %s" % (dav1d_bin, ivf_path, log_file), log_file)
     else:
         if not dav1d_bin:
-            print("skip dav1d: dav1d not found in PATH")
+            print("skip dav1d: dav1d not found")
 
     ''' 7z '''
     sevenz_bin = shutil.which("7zz") or shutil.which("7z")
@@ -67,7 +73,9 @@ def run_native(cwd, log_file):
         print("skip scimark2: %s not found" % (scimark2_class))
 
     ''' sljit '''
-    sljit_bin = "%s/benchmarks/sljit/bin/sljit_test" % (cwd)
+    sljit_bin = "%s/benchmarks/sljit/bin/sljit_test-aarch64" % (cwd)
+    if not os.path.exists(sljit_bin):
+        sljit_bin = "%s/benchmarks/sljit/bin/sljit_test" % (cwd)
     if os.path.exists(sljit_bin):
         log_marker(log_file, "sljit")
         print("sljit %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
@@ -108,10 +116,10 @@ def run_translated(tr, cwd, log_file):
     if not os.path.exists(ivf_path):
         os.system("wget http://dgql.org/~unlord/Netflix/Chimera/Chimera-AV1-8bit-480x270-552kbps.ivf -O %s" % (ivf_path))
     if os.path.exists(ivf_path):
-        os.environ['LD_LIBRARY_PATH'] = "$LD_LIBRARY_PATH:%s/benchmarks/dav1d" % (cwd)
+        os.environ['LD_LIBRARY_PATH'] = "%s/benchmarks/dav1d/lib-x86_64:%s" % (cwd, os.environ.get('LD_LIBRARY_PATH', ''))
         log_marker(log_file, "dav1d")
         print("dav1d %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
-        run("%s %s/benchmarks/dav1d/dav1d -i %s --muxer null 2>&1|tee %s" % (tr, cwd, ivf_path, log_file), log_file)
+        run("%s %s/benchmarks/dav1d/dav1d-x86_64 -i %s --muxer null 2>&1|tee %s" % (tr, cwd, ivf_path, log_file), log_file)
 
     ''' 7z '''
     log_marker(log_file, "7z")
@@ -138,7 +146,7 @@ def run_translated(tr, cwd, log_file):
         run("%s -Djava.library.path=%s -cp %s jnt.scimark2.commandline" % (java_bin, scimark2_dir, scimark2_dir), log_file)
 
     ''' sljit '''
-    sljit_bin = "%s/benchmarks/sljit/bin/sljit_test" % (cwd)
+    sljit_bin = "%s/benchmarks/sljit/bin/sljit_test-x86_64" % (cwd)
     if os.path.exists(sljit_bin):
         log_marker(log_file, "sljit")
         print("sljit %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))

@@ -1,2 +1,12 @@
-bin
+bin/*.o
+bin/sljit_test
+bin/regex_test
+bin/func_call
+bin/first_program
+bin/branch
+bin/loop
+bin/array_access
+bin/struct_access
+bin/temp_var
+bin/brainfuck
 taring
