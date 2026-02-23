@@ -2,6 +2,7 @@
 
 import sys
 import os
+import shutil
 import subprocess
 import time
 from datetime import datetime
@@ -17,6 +18,28 @@ def log_marker(log_file, name):
 def run_native(cwd, log_file):
     """Run benchmarks natively on ARM64 (no translator)."""
     print("btbench native mode start")
+
+    ''' dav1d '''
+    dav1d_bin = shutil.which("dav1d")
+    ivf_path = "%s/benchmarks/dav1d/Chimera-AV1-8bit-480x270-552kbps.ivf" % (cwd)
+    if not os.path.exists(ivf_path):
+        os.system("wget http://dgql.org/~unlord/Netflix/Chimera/Chimera-AV1-8bit-480x270-552kbps.ivf -O %s" % (ivf_path))
+    if dav1d_bin and os.path.exists(ivf_path):
+        log_marker(log_file, "dav1d")
+        print("dav1d %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
+        run("%s -i %s --muxer null 2>&1|tee %s" % (dav1d_bin, ivf_path, log_file), log_file)
+    else:
+        if not dav1d_bin:
+            print("skip dav1d: dav1d not found in PATH")
+
+    ''' 7z '''
+    sevenz_bin = shutil.which("7zz")
+    if sevenz_bin:
+        log_marker(log_file, "7z")
+        print("7z %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
+        run("%s b" % (sevenz_bin), log_file)
+    else:
+        print("skip 7z: 7zz not found in PATH")
 
     ''' scimark4_c '''
     scimark4_bin = "%s/benchmarks/scimark4_c/scimark4-aarch64" % (cwd)
@@ -56,6 +79,15 @@ def run_native(cwd, log_file):
         print("sljit elapsed: %.3f s" % elapsed)
     else:
         print("skip sljit: %s not found" % (sljit_bin))
+
+    ''' glmark2 '''
+    glmark2_bin = shutil.which("glmark2-es2")
+    if glmark2_bin:
+        log_marker(log_file, "glmark2")
+        print("glmark2 %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
+        run("%s --data-path /usr/share/glmark2" % (glmark2_bin), log_file)
+    else:
+        print("skip glmark2: glmark2-es2 not found in PATH")
 
     print("btbench native mode end")
     run("cat /proc/cpuinfo", log_file)
