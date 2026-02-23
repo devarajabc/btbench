@@ -8,6 +8,13 @@ For comparing different binary translators performance in [library wrapping](htt
 
 ## Usage
 
+### Native ARM64 benchmarks (no translator)
+```
+python3 btbench.py
+```
+Runs `dav1d`, `7z`, `scimark4_c`, `scimark2`, `sljit`, and `glmark2` natively. Requires native ARM64 binaries in PATH (`dav1d`, `7zz` or `7z`, `glmark2-es2-drm` or `glmark2-es2`).
+
+### Translated benchmarks (via binary translator)
 ```
 python3 btbench.py /your/path/translator
 ```
@@ -19,4 +26,9 @@ python3 btbench.py /usr/local/bin/box64
 or
 ```
 python3 btbench.py /usr/bin/latx-x86_64
+```
+
+### Compare native vs translated
+```
+python3 score.py logs/box64-*.log logs/native-*.log
 ```
