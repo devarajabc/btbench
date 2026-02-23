@@ -39,13 +39,15 @@ def run_native(cwd, log_file):
             print("skip dav1d: dav1d not found")
 
     ''' 7z '''
-    sevenz_bin = shutil.which("7zz") or shutil.which("7z")
+    sevenz_bin = "%s/benchmarks/p7zip/7z-aarch64" % (cwd)
+    if not os.path.exists(sevenz_bin):
+        sevenz_bin = shutil.which("7zz") or shutil.which("7z")
     if sevenz_bin:
         log_marker(log_file, "7z")
         print("7z %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
         run("%s b" % (sevenz_bin), log_file)
     else:
-        print("skip 7z: 7zz/7z not found in PATH")
+        print("skip 7z: 7z not found")
 
     ''' scimark4_c '''
     scimark4_bin = "%s/benchmarks/scimark4_c/scimark4-aarch64" % (cwd)
@@ -124,7 +126,7 @@ def run_translated(tr, cwd, log_file):
     ''' 7z '''
     log_marker(log_file, "7z")
     print("7z %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
-    run("%s %s/benchmarks/p7zip/7z b" % (tr, cwd), log_file)
+    run("%s %s/benchmarks/p7zip/7z-x86_64 b" % (tr, cwd), log_file)
 
     ''' scimark4_c '''
     log_marker(log_file, "scimark4_c")
