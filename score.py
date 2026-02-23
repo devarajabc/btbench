@@ -65,43 +65,47 @@ def print_single(scores):
 
 def print_comparison(translated, native):
     """Print translated vs native comparison table with ratio."""
-    # Benchmarks where higher is better
-    higher_better = [
-        ('scimark4_c',       'scimark4_c'),
-        ('scimark4_c_large', 'scimark4_c large'),
-        ('scimark2',         'scimark2'),
-    ]
-    # Benchmarks where lower is better (time-based)
-    lower_better = [
-        ('sljit', 'sljit (time/s)'),
+    # All benchmarks in display order: (key, label, mode)
+    # mode: "higher" = higher is better, "lower" = lower is better (time-based)
+    all_benchmarks = [
+        ('7z',               '7z',              'higher'),
+        ('dav1d',            'dav1d',           'higher'),
+        ('scimark4_c',       'scimark4_c',      'higher'),
+        ('scimark4_c_large', 'scimark4_c large', 'higher'),
+        ('scimark2',         'scimark2',        'higher'),
+        ('sljit',            'sljit (time/s)',  'lower'),
+        ('glmark2',          'glmark2',         'higher'),
     ]
 
     print("|benchmark       |native  |translated |ratio (%) |")
     print("|----------------|--------|-----------|----------|")
 
-    for key, label in higher_better:
-        n = native.get(key)
+    for key, label, mode in all_benchmarks:
         t = translated.get(key)
-        if n and t:
+        n = native.get(key)
+        if not t:
+            continue
+        try:
+            tf = float(t)
+        except (ValueError, TypeError):
+            continue
+        if n:
             try:
                 nf = float(n)
-                tf = float(t)
-                ratio = tf / nf * 100.0 if nf != 0 else 0
-                print("|%-16s|%-8.2f|%-11.2f|%-10.1f|" % (label, nf, tf, ratio))
-            except ValueError:
+                if mode == 'lower':
+                    ratio = nf / tf * 100.0 if tf != 0 else 0
+                    print("|%-16s|%-8.3f|%-11.3f|%-10.1f|" % (label, nf, tf, ratio))
+                else:
+                    ratio = tf / nf * 100.0 if nf != 0 else 0
+                    print("|%-16s|%-8.2f|%-11.2f|%-10.1f|" % (label, nf, tf, ratio))
+            except (ValueError, TypeError):
                 print("|%-16s|%-8s|%-11s|%-10s|" % (label, n, t, "N/A"))
-
-    for key, label in lower_better:
-        n = native.get(key)
-        t = translated.get(key)
-        if n and t:
-            try:
-                nf = float(n)
-                tf = float(t)
-                ratio = nf / tf * 100.0 if tf != 0 else 0
-                print("|%-16s|%-8.3f|%-11.3f|%-10.1f|" % (label, nf, tf, ratio))
-            except ValueError:
-                print("|%-16s|%-8s|%-11s|%-10s|" % (label, n, t, "N/A"))
+        else:
+            # No native baseline — show translated score only
+            if mode == 'lower':
+                print("|%-16s|%-8s|%-11.3f|%-10s|" % (label, "-", tf, "-"))
+            else:
+                print("|%-16s|%-8s|%-11.2f|%-10s|" % (label, "-", tf, "-"))
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
