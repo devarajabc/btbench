@@ -81,11 +81,14 @@ def run_native(cwd, log_file):
         print("skip sljit: %s not found" % (sljit_bin))
 
     ''' glmark2 '''
-    glmark2_bin = shutil.which("glmark2-es2-drm") or shutil.which("glmark2-es2")
+    glmark2_bin = "%s/benchmarks/glmark2/bin/glmark2-es2-drm-aarch64" % (cwd)
+    if not os.path.exists(glmark2_bin):
+        glmark2_bin = shutil.which("glmark2-es2-drm") or shutil.which("glmark2-es2")
+    glmark2_data = "%s/benchmarks/glmark2/share/glmark2" % (cwd)
     if glmark2_bin:
         log_marker(log_file, "glmark2")
         print("glmark2 %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
-        run("%s --data-path /usr/share/glmark2 --off-screen" % (glmark2_bin), log_file)
+        run("%s --data-path %s --off-screen" % (glmark2_bin, glmark2_data), log_file)
     else:
         print("skip glmark2: glmark2-es2 not found in PATH")
 
@@ -148,10 +151,9 @@ def run_translated(tr, cwd, log_file):
 
     ''' glmark2 '''
     glmark2_path = "%s/benchmarks/glmark2" % (cwd)
-    os.environ['LD_LIBRARY_PATH'] = "$LD_LIBRARY_PATH:%s" % (glmark2_path)
     log_marker(log_file, "glmark2")
     print("glmark2 %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
-    run("%s %s/bin/glmark2 --data-path %s/share/glmark2 --off-screen" % (tr, glmark2_path, glmark2_path), log_file)
+    run("%s %s/bin/glmark2-es2-drm-x86_64 --data-path %s/share/glmark2 --off-screen" % (tr, glmark2_path, glmark2_path), log_file)
 
     print("btbench %s end" % (tr))
 
