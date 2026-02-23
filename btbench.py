@@ -33,7 +33,7 @@ def run_native(cwd, log_file):
             print("skip dav1d: dav1d not found in PATH")
 
     ''' 7z '''
-    sevenz_bin = shutil.which("7zz")
+    sevenz_bin = "/usr/bin/7zz" if os.path.exists("/usr/bin/7zz") else shutil.which("7zz")
     if sevenz_bin:
         log_marker(log_file, "7z")
         print("7z %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
@@ -85,7 +85,7 @@ def run_native(cwd, log_file):
     if glmark2_bin:
         log_marker(log_file, "glmark2")
         print("glmark2 %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
-        run("%s --data-path /usr/share/glmark2" % (glmark2_bin), log_file)
+        run("%s --data-path /usr/share/glmark2 --off-screen" % (glmark2_bin), log_file)
     else:
         print("skip glmark2: glmark2-es2 not found in PATH")
 
@@ -151,7 +151,7 @@ def run_translated(tr, cwd, log_file):
     os.environ['LD_LIBRARY_PATH'] = "$LD_LIBRARY_PATH:%s" % (glmark2_path)
     log_marker(log_file, "glmark2")
     print("glmark2 %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
-    run("%s %s/bin/glmark2 --data-path %s/share/glmark2" % (tr, glmark2_path, glmark2_path), log_file)
+    run("%s %s/bin/glmark2 --data-path %s/share/glmark2 --off-screen" % (tr, glmark2_path, glmark2_path), log_file)
 
     print("btbench %s end" % (tr))
 
