@@ -81,7 +81,7 @@ def run_native(cwd, log_file):
         print("skip sljit: %s not found" % (sljit_bin))
 
     ''' glmark2 '''
-    glmark2_bin = shutil.which("glmark2-es2")
+    glmark2_bin = shutil.which("glmark2-es2-drm") or shutil.which("glmark2-es2")
     if glmark2_bin:
         log_marker(log_file, "glmark2")
         print("glmark2 %s" % (datetime.today().strftime('%Y-%m-%d %H:%M:%S')))
